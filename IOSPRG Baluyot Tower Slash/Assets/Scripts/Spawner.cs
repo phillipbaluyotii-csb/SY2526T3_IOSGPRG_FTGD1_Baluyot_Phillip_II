@@ -13,7 +13,7 @@ public class Spawner : Singleton<Spawner>
     {
         GameObject enemy = Instantiate(_enemyPrefab, _spawnLocation.transform.position, Quaternion.identity);
         Enemy enemyScript = enemy.GetComponent<Enemy>();
-        enemyScript.Initialize();
+        enemyScript.InitializeEnemy();
         _enemies.Add(enemy);
     }
 

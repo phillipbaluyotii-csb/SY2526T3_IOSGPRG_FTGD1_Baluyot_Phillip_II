@@ -6,9 +6,9 @@ using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
-    [SerializeField] private bool _detectedByPlayer = false; 
-    
-    [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField] private bool _detectedByPlayer = false;
+
+    //[SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private List<Sprite> _arrowSprites = new List<Sprite>();
 
     private void Start()
@@ -23,7 +23,7 @@ public class Timer : MonoBehaviour
 
         while (!_detectedByPlayer)
         {
-            _spriteRenderer.sprite = _arrowSprites[index % 4];
+            //_spriteRenderer.sprite = _arrowSprites[index % 4];
             index++;
             yield return new WaitForSecondsRealtime(1f);
         }
@@ -36,7 +36,7 @@ public class Timer : MonoBehaviour
         while(true)
         {
             CurrentTime += Time.deltaTime;
-            Debug.Log($"Spawn Timer: {CurrentTime}");
+            //Debug.Log($"Spawn Timer: {CurrentTime}");
             if (CurrentTime >= seconds)
             {
                 Spawner.Instance.SpawnEnemy();
