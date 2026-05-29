@@ -11,8 +11,11 @@ public class Enemy : MonoBehaviour
     [Header("Arrow Settings")]
     [SerializeField] private SwipeType _swipeType;
     [SerializeField] private bool _isReverse;
+    [SerializeField] private bool _isRotating;
 
     [SerializeField] private SpriteRenderer _arrowRenderer;
+    [SerializeField] private Transform _arrowTransform;
+    [SerializeField] private float _rotationSpeed = 300f;
 
     [SerializeField] private Sprite _upArrow;
     [SerializeField] private Sprite _downArrow;
@@ -35,7 +38,17 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         MoveDown();
+        RotateArrow();
     }
+
+    /*private void Awake()
+    {
+        if (_arrowTransform == null)
+            _arrowTransform = transform.Find("Arrow");
+
+        if (_arrowRenderer == null)
+            _arrowRenderer = GetComponentInChildren<SpriteRenderer>();
+    }*/
 
     private void MoveDown()
     {
@@ -47,22 +60,32 @@ public class Enemy : MonoBehaviour
         _swipeType = (SwipeType)Random.Range(0, 4);
 
         _isReverse = Random.Range(0, 2) == 0;
+        _isRotating = Random.Range(0, 4) == 0;
 
         SetArrowSprite();
 
-        if (_isReverse)
-{
-    _arrowRenderer.color = Color.red;
-}
-else
-{
-    _arrowRenderer.color = Color.green;
-}
+        if (_isRotating)
+        {
+            _arrowRenderer.color = Color.yellow;
+        }
+        else if (_isReverse)
+        {
+            _arrowRenderer.color = Color.red;
+        }
+        else
+        {
+            _arrowRenderer.color = Color.green;
+        }
     }
 
     public void EnableKill()
     {
         _canBeKilled = true;
+
+        if (_isRotating)
+        {
+            DetermineRotatingDirection();
+        }
     }
 
     public void DisableKill()
@@ -89,6 +112,39 @@ else
             case SwipeType.RIGHT:
                 _arrowRenderer.sprite = _rightArrow;
                 break;
+        }
+    }
+
+    private void RotateArrow()
+    {
+        if (!_isRotating)
+            return;
+
+        if (_canBeKilled)
+            return;
+
+        _arrowTransform.Rotate(0f, 0f, -_rotationSpeed * Time.deltaTime);
+    }
+
+    private void DetermineRotatingDirection()
+    {
+        float zRotation = _arrowTransform.eulerAngles.z;
+
+        if (zRotation >= 315 || zRotation < 45)
+        {
+            _swipeType = SwipeType.UP;
+        }
+        else if (zRotation >= 45 && zRotation < 135)
+        {
+            _swipeType = SwipeType.LEFT;
+        }
+        else if (zRotation >= 135 && zRotation < 225)
+        {
+            _swipeType = SwipeType.DOWN;
+        }
+        else
+        {
+            _swipeType = SwipeType.RIGHT;
         }
     }
 }

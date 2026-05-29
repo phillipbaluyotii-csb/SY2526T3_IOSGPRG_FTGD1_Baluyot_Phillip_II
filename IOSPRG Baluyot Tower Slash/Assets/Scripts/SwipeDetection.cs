@@ -28,6 +28,10 @@ public class TouchInput : MonoBehaviour
 
     public static TouchInput Instance;
 
+    // Double Tap Detection
+    private float _lastTapTime;
+    [SerializeField] private float _doubleTapDelay = 0.3f;
+
     private void Awake()
     {
         Instance = this;
@@ -53,6 +57,7 @@ public class TouchInput : MonoBehaviour
     {
         _touchStart = _touchPositionAction.ReadValue<Vector2>();
 
+        DetectDoubleTap();
     }
 
     private void OnTouchReleased(InputAction.CallbackContext context)
@@ -107,6 +112,16 @@ public class TouchInput : MonoBehaviour
 
         Debug.Log($"Swipe Type = {swipeType}");
         _distance = Vector2.zero;
+    }
+
+    private void DetectDoubleTap()
+    {
+        if (Time.time - _lastTapTime <= _doubleTapDelay)
+        {
+            FindObjectOfType<Player>().StartDash();
+        }
+
+        _lastTapTime = Time.time;
     }
 }
 

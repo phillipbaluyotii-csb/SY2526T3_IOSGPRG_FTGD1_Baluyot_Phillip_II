@@ -104,7 +104,10 @@ MonoBehaviour:
   _speed: 0
   _swipeType: 0
   _isReverse: 0
+  _isRotating: 0
   _arrowRenderer: {fileID: 4917889511002557208}
+  _arrowTransform: {fileID: 6993244260936995715}
+  _rotationSpeed: 300
   _upArrow: {fileID: 21300000, guid: 2e0d3881d5cec26479b7be6a2902572b, type: 3}
   _downArrow: {fileID: 21300000, guid: 7af212057f74c3749a6fbae8a1f0757b, type: 3}
   _leftArrow: {fileID: 21300000, guid: 19116369a2478f144a291dd27ef8b3af, type: 3}
