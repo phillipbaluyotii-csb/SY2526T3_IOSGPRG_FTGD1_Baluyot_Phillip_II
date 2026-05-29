@@ -43,7 +43,7 @@ public class Enemy : MonoBehaviour
 
     /*private void Awake()
     {
-        if (_arrowTransform == null)
+        if (_arrowTran6sform == null)
             _arrowTransform = transform.Find("Arrow");
 
         if (_arrowRenderer == null)
@@ -128,7 +128,7 @@ public class Enemy : MonoBehaviour
 
     private void DetermineRotatingDirection()
     {
-        float zRotation = _arrowTransform.eulerAngles.z;
+        float zRotation = (_arrowTransform.eulerAngles.z + 360f) % 360f;
 
         if (zRotation >= 315 || zRotation < 45)
         {
@@ -146,5 +146,7 @@ public class Enemy : MonoBehaviour
         {
             _swipeType = SwipeType.RIGHT;
         }
+
+        SetArrowSprite();
     }
 }

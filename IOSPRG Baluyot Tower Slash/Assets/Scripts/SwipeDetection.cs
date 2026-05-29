@@ -118,7 +118,14 @@ public class TouchInput : MonoBehaviour
     {
         if (Time.time - _lastTapTime <= _doubleTapDelay)
         {
-            FindObjectOfType<Player>().StartDash();
+            // FindObjectOfType<Player>().StartDash();
+
+            Player player = FindObjectOfType<Player>();
+
+            if (player != null)
+            {
+                player.StartDash();
+            }
         }
 
         _lastTapTime = Time.time;

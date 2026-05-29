@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da42cb953f3032b498df151d0a2900f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 0
+  _speed: 1
   _swipeType: 0
   _isReverse: 0
   _isRotating: 0

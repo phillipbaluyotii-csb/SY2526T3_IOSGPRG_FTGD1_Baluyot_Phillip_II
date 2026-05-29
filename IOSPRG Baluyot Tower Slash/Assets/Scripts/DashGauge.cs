@@ -16,6 +16,14 @@ public class DashGauge : Singleton<DashGauge>
 
     private bool _isDraining;
 
+    private void Start()
+    {
+        _dashButton.onClick.AddListener(() =>
+        {
+            FindObjectOfType<Player>().StartDash();
+        });
+    }
+
     private void Update()
     {
         UpdateUI();

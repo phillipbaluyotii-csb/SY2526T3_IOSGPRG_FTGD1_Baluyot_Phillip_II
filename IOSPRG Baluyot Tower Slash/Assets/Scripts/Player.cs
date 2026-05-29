@@ -11,6 +11,9 @@ public class Player : MonoBehaviour
     [Header("Player Lives")]
     [SerializeField] private int _maxLives = 3;
     [SerializeField] private int _currentLives;
+
+    [SerializeField] private bool _isInvincible;
+    [SerializeField] private float _invincibleDuration = 1f;
     
     private Enemy _currentEnemy;
 
@@ -48,11 +51,18 @@ public class Player : MonoBehaviour
         {
             Debug.Log("Enemy Defeated");
 
+            Spawner.Instance.RemoveEnemyFromList(_currentEnemy);
+
             Destroy(_currentEnemy.gameObject);
+
+            DashGauge.Instance.AddGauge(5f);
+
+            TrySpawnExtraLife();
         }
         else
         {
             Debug.Log("Wrong Swipe");
+            TakeDamage();
         }
 
         TouchInput.Instance.swipeType = SwipeType.NONE;
@@ -87,6 +97,7 @@ public class Player : MonoBehaviour
             if (_isDashing)
             {
                 Spawner.Instance.RemoveEnemyFromList(enemy);
+
                 Destroy(enemy.gameObject);
 
                 DashGauge.Instance.AddGauge(5f);
@@ -125,11 +136,16 @@ public class Player : MonoBehaviour
 
     public void TakeDamage()
     {
+        if (_isInvincible)
+            return;
+
+        StartCoroutine(CO_Invincibility());
+
         _currentLives--;
 
         Debug.Log("Lives left: " + _currentLives);
 
-        if ( _currentLives == 0 )
+        if ( _currentLives <= 0 )
         {
             GameManager.Instance.GameOver();
         }
@@ -169,10 +185,19 @@ public class Player : MonoBehaviour
     {
         _isDashing = true;
 
-        DashGauge.Instance.DrainGauge();
+        DashGauge.Instance.StartDrain();
 
         yield return new WaitForSeconds(_dashDuration);
 
         _isDashing = false;
+    }
+
+    private IEnumerator CO_Invincibility()
+    {
+        _isInvincible = true;
+
+        yield return new WaitForSeconds(_invincibleDuration);
+
+        _isInvincible = false;
     }
 }

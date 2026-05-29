@@ -1117,6 +1117,8 @@ MonoBehaviour:
   _isDashing: 0
   _maxLives: 3
   _currentLives: 0
+  _isInvincible: 0
+  _invincibleDuration: 1
 --- !u!212 &935802923
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1918,56 +1920,6 @@ RectTransform:
   m_AnchoredPosition: {x: 120, y: 60}
   m_SizeDelta: {x: 160, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1814460042
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1814460044}
-  - component: {fileID: 1814460043}
-  m_Layer: 0
-  m_Name: Timer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1814460043
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1814460042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25c81ead4d488314e98950e28486911d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _detectedByPlayer: 0
-  _arrowSprites:
-  - {fileID: 21300000, guid: 2e0d3881d5cec26479b7be6a2902572b, type: 3}
-  - {fileID: 21300000, guid: 8338df5d62acbc947b9e68acd56d13bd, type: 3}
-  - {fileID: 21300000, guid: 7af212057f74c3749a6fbae8a1f0757b, type: 3}
-  - {fileID: 21300000, guid: 19116369a2478f144a291dd27ef8b3af, type: 3}
---- !u!4 &1814460044
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1814460042}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1939620892
 GameObject:
   m_ObjectHideFlags: 0
@@ -2256,7 +2208,6 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 1600856308}
-  - {fileID: 1814460044}
   - {fileID: 1479967855}
   - {fileID: 1957888149}
   - {fileID: 935802924}
