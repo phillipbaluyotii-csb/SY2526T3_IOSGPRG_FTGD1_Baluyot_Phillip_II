@@ -133,20 +133,34 @@ public class Enemy : MonoBehaviour
         if (zRotation >= 315 || zRotation < 45)
         {
             _swipeType = SwipeType.UP;
+            _arrowTransform.eulerAngles = new Vector3(0, 0, 0);
         }
         else if (zRotation >= 45 && zRotation < 135)
         {
             _swipeType = SwipeType.LEFT;
+            _arrowTransform.eulerAngles = new Vector3(0, 0, 90);
         }
         else if (zRotation >= 135 && zRotation < 225)
         {
             _swipeType = SwipeType.DOWN;
+            _arrowTransform.eulerAngles = new Vector3(0, 0, 180);
         }
         else
         {
             _swipeType = SwipeType.RIGHT;
+            _arrowTransform.eulerAngles = new Vector3(0, 0, 270);
         }
 
         SetArrowSprite();
+    }
+
+    private void OnBecameInvisible()
+    {
+        if (Spawner.Instance != null)
+        {
+            Spawner.Instance.RemoveEnemyFromList(this);
+        }
+
+        Destroy(gameObject);
     }
 }

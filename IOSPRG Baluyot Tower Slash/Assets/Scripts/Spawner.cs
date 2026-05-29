@@ -10,6 +10,9 @@ public class Spawner : Singleton<Spawner>
     [SerializeField] private float _spawnDelay = 1.5f;
     [SerializeField] private int _maxEnemies = 10;
 
+    [SerializeField] private float _minSpawn = 1f;
+    [SerializeField] private float _maxSpawn = 3f;
+
     private List<GameObject> _enemies = new List<GameObject>();
 
     private void Start()
@@ -40,6 +43,16 @@ public class Spawner : Singleton<Spawner>
                 continue;
 
             SpawnEnemy();
+        }
+    }
+
+    private IEnumerator CO_SpawnEnemies()
+    {
+        while (true)
+        {
+            SpawnEnemy();
+
+            yield return new WaitForSeconds(Random.Range(_minSpawn, _maxSpawn));
         }
     }
 }

@@ -7,6 +7,8 @@ public class Player : MonoBehaviour
     [Header("Dash Mechanic")]
     [SerializeField] private float _dashDuration = 1f;
     [SerializeField] private bool _isDashing;
+    
+    [SerializeField] private GameObject _dashHitbox;    //Dash Hitbox
 
     [Header("Player Lives")]
     [SerializeField] private int _maxLives = 3;
@@ -62,6 +64,7 @@ public class Player : MonoBehaviour
         else
         {
             Debug.Log("Wrong Swipe");
+
             TakeDamage();
         }
 
@@ -185,9 +188,13 @@ public class Player : MonoBehaviour
     {
         _isDashing = true;
 
+        _dashHitbox.SetActive(true);
+
         DashGauge.Instance.StartDrain();
 
         yield return new WaitForSeconds(_dashDuration);
+
+        _dashHitbox.SetActive(false);
 
         _isDashing = false;
     }
