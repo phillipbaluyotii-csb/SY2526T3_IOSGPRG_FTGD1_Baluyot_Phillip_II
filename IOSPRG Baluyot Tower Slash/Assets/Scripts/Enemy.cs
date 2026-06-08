@@ -32,10 +32,10 @@ public class Enemy : MonoBehaviour
 
     public bool CanBeKilled => _canBeKilled;
 
-    private void Start()
+    /*private void Start()
     {
         InitializeEnemy();
-    }
+    }*/
 
     private void Update()
     {
@@ -43,14 +43,14 @@ public class Enemy : MonoBehaviour
         RotateArrow();
     }
 
-    /*private void Awake()
+    private void Awake()
     {
-        if (_arrowTran6sform == null)
+        if (_arrowTransform == null)
             _arrowTransform = transform.Find("Arrow");
 
         if (_arrowRenderer == null)
             _arrowRenderer = GetComponentInChildren<SpriteRenderer>();
-    }*/
+    }
 
     private void MoveDown()
     {
@@ -61,8 +61,19 @@ public class Enemy : MonoBehaviour
     {
         _swipeType = (SwipeType)Random.Range(0, 4);
 
-        _isReverse = Random.Range(0, 2) == 0;
+        //_isReverse = Random.Range(0, 2) == 0;
+        //_isRotating = Random.Range(0, 4) == 0;
+
         _isRotating = Random.Range(0, 4) == 0;
+
+        if (_isRotating)
+        {
+            _isReverse = false;
+        }
+        else
+        {
+            _isReverse = Random.Range(0, 2) == 0;
+        }
 
         SetArrowSprite();
 

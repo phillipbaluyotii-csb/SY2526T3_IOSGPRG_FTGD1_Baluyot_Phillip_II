@@ -123,8 +123,6 @@ public class Player : MonoBehaviour
         {
             enemy.DisableKill();
 
-            TakeDamage();
-
             _currentEnemy = null;
         }
     }
@@ -152,6 +150,11 @@ public class Player : MonoBehaviour
 
         if (enemy != null)
         {
+            if (_currentEnemy != enemy)
+            {
+                TouchInput.Instance.swipeType = SwipeType.NONE;
+            }
+
             enemy.EnableKill();
             _currentEnemy = enemy;
         }
