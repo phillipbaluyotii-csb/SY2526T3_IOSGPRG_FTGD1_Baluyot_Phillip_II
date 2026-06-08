@@ -95,23 +95,24 @@ public class Player : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Enemy enemy = collision.gameObject.GetComponent<Enemy>();
-        if (enemy != null)
+
+        if (enemy == null)
+            return;
+
+        if (_isDashing)
         {
-            if (_isDashing)
-            {
-                Spawner.Instance.RemoveEnemyFromList(enemy);
+            Spawner.Instance.RemoveEnemyFromList(enemy);
 
-                Destroy(enemy.gameObject);
+            Destroy(enemy.gameObject);
 
-                DashGauge.Instance.AddGauge(5f);
+            DashGauge.Instance.AddGauge(5f);
 
-                TrySpawnExtraLife();    // extra life chance
-                return;
-            }
-
-            //GameManager.Instance.GameOver();
-            TakeDamage();
+            TrySpawnExtraLife();    // extra life chance
+            return;
         }
+
+        //GameManager.Instance.GameOver();
+        //_currentEnemy = enemy;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -122,9 +123,28 @@ public class Player : MonoBehaviour
         {
             enemy.DisableKill();
 
+            TakeDamage();
+
             _currentEnemy = null;
         }
     }
+
+    /*private void OnTriggerExit2D(Collider2D collision)
+    {
+        Enemy enemy = collision.GetComponent<Enemy>();
+
+        if (enemy == null)
+            return;
+
+        if (_isDashing)
+            return;
+
+        enemy.DisableKill();
+
+        TakeDamage();
+
+        _currentEnemy = null;
+    }*/
 
     private void OnTriggerStay2D(Collider2D collision)
     {

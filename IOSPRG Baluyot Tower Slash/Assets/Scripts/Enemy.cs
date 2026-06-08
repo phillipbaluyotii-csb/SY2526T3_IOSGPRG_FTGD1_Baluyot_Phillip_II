@@ -22,6 +22,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Sprite _leftArrow;
     [SerializeField] private Sprite _rightArrow;
 
+    [SerializeField] private GameObject _blackBox;  // black box
+
     private bool _canBeKilled;
 
     public SwipeType SwipeType => _swipeType;
@@ -82,6 +84,11 @@ public class Enemy : MonoBehaviour
     {
         _canBeKilled = true;
 
+        if (_blackBox != null)
+        {
+            _blackBox.SetActive(true);
+        }
+
         if (_isRotating)
         {
             DetermineRotatingDirection();
@@ -91,6 +98,11 @@ public class Enemy : MonoBehaviour
     public void DisableKill()
     {
         _canBeKilled = false;
+
+        if (_blackBox != null)
+        {
+            _blackBox.SetActive(false);
+        }
     }
 
     private void SetArrowSprite()
