@@ -11,6 +11,10 @@ public class DashHitbox : MonoBehaviour
 
         Spawner.Instance.RemoveEnemyFromList(enemy);
 
+        DashGauge.Instance.AddGauge(Player.Instance.GaugeReward);
+
+        Spawner.Instance.RemoveEnemyFromList(enemy);
+
         Destroy(enemy.gameObject);
     }
 }

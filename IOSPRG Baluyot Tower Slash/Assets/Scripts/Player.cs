@@ -22,16 +22,62 @@ public class Player : MonoBehaviour
 
     [SerializeField] private TMP_Text _livesText;   // lives UI
 
+    private CharacterType _characterType;   // character types
+    public static Player Instance;
+
+    [SerializeField] private Animator _animator;
+
+    [SerializeField] private RuntimeAnimatorController _defaultController;
+    [SerializeField] private RuntimeAnimatorController _tankController;
+    [SerializeField] private RuntimeAnimatorController _speedController;
+
     private void Start()
     {
+        ApplyCharacter();
+        
         _currentLives = _maxLives;
 
         UpdateLivesUI();
     }
 
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void Update()
     {
         CheckEnemy();
+    }
+
+    private void ApplyCharacter()
+    {
+        _characterType =
+            CharacterManager.SelectedCharacter;
+
+        switch (_characterType)
+        {
+            case CharacterType.Default:
+
+                _animator.runtimeAnimatorController =
+                    _defaultController;
+                _maxLives = 3;
+                break;
+
+            case CharacterType.Tank:
+
+                _animator.runtimeAnimatorController =
+                    _tankController;
+                _maxLives = 5;
+                break;
+
+            case CharacterType.Speed:
+
+                _animator.runtimeAnimatorController =
+                    _speedController;
+                _maxLives = 3;
+                break;
+        }
     }
 
     private void UpdateLivesUI()
@@ -69,7 +115,7 @@ public class Player : MonoBehaviour
 
             Destroy(_currentEnemy.gameObject);
 
-            DashGauge.Instance.AddGauge(5f);
+            DashGauge.Instance.AddGauge(GaugeReward);
 
             TrySpawnExtraLife();
         }
@@ -146,6 +192,17 @@ public class Player : MonoBehaviour
 
             enemy.EnableKill();
             _currentEnemy = enemy;
+        }
+    }
+
+    public float GaugeReward
+    {
+        get
+        {
+            if (_characterType == CharacterType.Speed)
+                return 10f;
+
+            return 5f;
         }
     }
 

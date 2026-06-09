@@ -41,6 +41,21 @@ public class GameManager : Singleton<GameManager>
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    public void ReturnToCharacterSelect()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("CharacterSelect");
+    }
+
+    public void Quit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
+
     public void AddScore(int amount)
     {
         _score += amount;
@@ -52,7 +67,7 @@ public class GameManager : Singleton<GameManager>
     {
         if (_scoreText != null)
         {
-            _scoreText.text = "Score: " + _score;
+            _scoreText.text = "SCORE: " + _score;
         }
     }
 }
