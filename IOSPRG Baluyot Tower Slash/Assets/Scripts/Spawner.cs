@@ -7,7 +7,7 @@ public class Spawner : Singleton<Spawner>
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private GameObject _spawnLocation;
 
-    [SerializeField] private float _spawnDelay = 1.5f;
+    [SerializeField] private float _spawnDelay = 0.5f;
     [SerializeField] private int _maxEnemies = 9999;
     // remove for uncapping
 
