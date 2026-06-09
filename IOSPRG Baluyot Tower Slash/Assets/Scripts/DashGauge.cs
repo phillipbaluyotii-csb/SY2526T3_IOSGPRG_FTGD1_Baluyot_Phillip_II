@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class DashGauge : Singleton<DashGauge>
 {
@@ -12,12 +13,16 @@ public class DashGauge : Singleton<DashGauge>
     [SerializeField] private float _currentGauge;
 
     [Header("Drain")]
-    [SerializeField] private float _drainSpeed = 40f;
+    [SerializeField] private float _drainSpeed = 5f;
 
     private bool _isDraining;
 
+    private Player _player;
+
     private void Start()
     {
+        _player = FindObjectOfType<Player>();
+
         _dashButton.onClick.AddListener(() =>
         {
             FindObjectOfType<Player>().StartDash();

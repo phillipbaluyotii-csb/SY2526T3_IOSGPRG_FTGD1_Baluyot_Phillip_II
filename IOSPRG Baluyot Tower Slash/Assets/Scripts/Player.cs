@@ -5,7 +5,7 @@ using System.Collections;
 public class Player : MonoBehaviour
 {
     [Header("Dash Mechanic")]
-    [SerializeField] private float _dashDuration = 1f;
+    //[SerializeField] private float _dashDuration = 1f;
     [SerializeField] private bool _isDashing;
     
     [SerializeField] private GameObject _dashHitbox;    //Dash Hitbox
@@ -91,29 +91,6 @@ public class Player : MonoBehaviour
         return SwipeType.NONE;
     }
 
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        Enemy enemy = collision.gameObject.GetComponent<Enemy>();
-
-        if (enemy == null)
-            return;
-
-        if (_isDashing)
-        {
-            Spawner.Instance.RemoveEnemyFromList(enemy);
-
-            Destroy(enemy.gameObject);
-
-            DashGauge.Instance.AddGauge(5f);
-
-            TrySpawnExtraLife();    // extra life chance
-            return;
-        }
-
-        //GameManager.Instance.GameOver();
-        //_currentEnemy = enemy;
-    }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -215,7 +192,10 @@ public class Player : MonoBehaviour
 
         DashGauge.Instance.StartDrain();
 
-        yield return new WaitForSeconds(_dashDuration);
+        while (DashGauge.Instance.IsDraining())
+        {
+            yield return null;
+        }
 
         _dashHitbox.SetActive(false);
 
