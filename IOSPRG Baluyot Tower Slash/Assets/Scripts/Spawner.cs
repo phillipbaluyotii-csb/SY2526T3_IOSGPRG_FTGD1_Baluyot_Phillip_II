@@ -7,12 +7,11 @@ public class Spawner : Singleton<Spawner>
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private GameObject _spawnLocation;
 
-    [SerializeField] private float _spawnDelay = 0.5f;
     [SerializeField] private int _maxEnemies = 9999;
     // remove for uncapping
 
-    [SerializeField] private float _minSpawn = 1f;
-    [SerializeField] private float _maxSpawn = 3f;
+    [SerializeField] private float _minSpawn = 0.3f;
+    [SerializeField] private float _maxSpawn = 1.5f;
 
     private List<GameObject> _enemies = new List<GameObject>();
 
@@ -38,21 +37,10 @@ public class Spawner : Singleton<Spawner>
     {
         while (true)
         {
-            yield return new WaitForSeconds(_spawnDelay);
-
-            if (_enemies.Count >= _maxEnemies)
-                continue;
-            //remove for uncapping
-
-            SpawnEnemy();
-        }
-    }
-
-    private IEnumerator CO_SpawnEnemies()
-    {
-        while (true)
-        {
-            SpawnEnemy();
+            if (_enemies.Count < _maxEnemies)
+            {
+                SpawnEnemy();
+            }
 
             yield return new WaitForSeconds(Random.Range(_minSpawn, _maxSpawn));
         }
