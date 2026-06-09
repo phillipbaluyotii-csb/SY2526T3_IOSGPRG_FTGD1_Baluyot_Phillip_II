@@ -162,23 +162,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    /*private void OnTriggerExit2D(Collider2D collision)
-    {
-        Enemy enemy = collision.GetComponent<Enemy>();
-
-        if (enemy == null)
-            return;
-
-        if (_isDashing)
-            return;
-
-        enemy.DisableKill();
-
-        TakeDamage();
-
-        _currentEnemy = null;
-    }*/
-
     private void OnTriggerStay2D(Collider2D collision)
     {
         Enemy enemy = collision.GetComponent<Enemy>();
