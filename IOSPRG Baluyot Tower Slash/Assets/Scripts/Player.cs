@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class Player : MonoBehaviour
     //[SerializeField] private float _dashDuration = 1f;
     [SerializeField] private bool _isDashing;
     
-    [SerializeField] private GameObject _dashHitbox;    //Dash Hitbox
+    [SerializeField] private GameObject _dashHitbox;    // Dash Hitbox
 
     [Header("Player Lives")]
     [SerializeField] private int _maxLives = 3;
@@ -19,14 +20,23 @@ public class Player : MonoBehaviour
     
     private Enemy _currentEnemy;
 
+    [SerializeField] private TMP_Text _livesText;   // lives UI
+
     private void Start()
     {
         _currentLives = _maxLives;
+
+        UpdateLivesUI();
     }
 
     private void Update()
     {
         CheckEnemy();
+    }
+
+    private void UpdateLivesUI()
+    {
+        _livesText.text = "Lives: " + _currentLives;
     }
 
     private void CheckEnemy()
@@ -52,6 +62,8 @@ public class Player : MonoBehaviour
         if (currentSwipe == expectedSwipe)
         {
             Debug.Log("Enemy Defeated");
+
+            GameManager.Instance.AddScore(1);
 
             Spawner.Instance.RemoveEnemyFromList(_currentEnemy);
 
@@ -146,6 +158,8 @@ public class Player : MonoBehaviour
 
         _currentLives--;
 
+        UpdateLivesUI();
+
         Debug.Log("Lives left: " + _currentLives);
 
         if ( _currentLives <= 0 )
@@ -160,6 +174,8 @@ public class Player : MonoBehaviour
         _currentLives++;
 
         _currentLives = Mathf.Clamp(_currentLives, 0, _maxLives);
+
+        UpdateLivesUI();
 
         Debug.Log("Extra Life Obtained!");
     }
