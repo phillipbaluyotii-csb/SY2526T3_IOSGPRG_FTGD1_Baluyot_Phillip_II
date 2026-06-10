@@ -15,7 +15,6 @@ public class DashGauge : Singleton<DashGauge>
     [SerializeField] private float _drainSpeed = 5f;
 
     private bool _isDraining;
-
     private Player _player;
 
     private void Start()
@@ -32,13 +31,6 @@ public class DashGauge : Singleton<DashGauge>
     {
         UpdateUI();
         DrainGauge();
-    }
-
-    private void UpdateUI()
-    {
-        _gaugeFill.fillAmount = _currentGauge / _maxGauge;
-
-        _dashButton.interactable = CanDash();
     }
 
     public void AddGauge(float amount)
@@ -61,7 +53,19 @@ public class DashGauge : Singleton<DashGauge>
         _isDraining = true;
     }
 
-    public void DrainGauge()
+    public bool IsDraining()
+    {
+        return _isDraining;
+    }
+
+    private void UpdateUI()
+    {
+        _gaugeFill.fillAmount = _currentGauge / _maxGauge;
+
+        _dashButton.interactable = CanDash();
+    }
+
+    private void DrainGauge()
     {
         if (!_isDraining)
             return;
@@ -73,10 +77,5 @@ public class DashGauge : Singleton<DashGauge>
             _currentGauge = 0f;
             _isDraining = false;
         }
-    }
-
-    public bool IsDraining()
-    {
-        return _isDraining;
     }
 }

@@ -14,6 +14,11 @@ public enum SwipeType
 public class TouchInput : MonoBehaviour
 {
     [SerializeField] private PlayerInput _playerInput;
+    [SerializeField] private float minDistance = 50f;
+
+    public SwipeType swipeType = SwipeType.NONE;
+
+    [SerializeField] private float _doubleTapDelay = 0.3f;
 
     private InputAction _touchPressedAction;
     private InputAction _touchPositionAction;
@@ -22,15 +27,10 @@ public class TouchInput : MonoBehaviour
     private Vector2 _touchEnd;
     private Vector2 _distance;
 
-    [SerializeField] private float minDistance = 50f;
-
-    public SwipeType swipeType = SwipeType.NONE;
-
     public static TouchInput Instance;
 
     // Double Tap Detection
     private float _lastTapTime;
-    [SerializeField] private float _doubleTapDelay = 0.3f;
 
     private void Awake()
     {
@@ -45,7 +45,6 @@ public class TouchInput : MonoBehaviour
         _touchPressedAction.started += OnTouchStarted;
         _touchPressedAction.canceled += OnTouchReleased;
     }
-
 
     private void OnDisable()
     {
@@ -66,6 +65,7 @@ public class TouchInput : MonoBehaviour
 
         DetectSwipe();
     }
+
     private void DetectSwipe()
     {
         _distance = _touchStart - _touchEnd;
@@ -89,7 +89,7 @@ public class TouchInput : MonoBehaviour
 
         if (Mathf.Abs(x) > Mathf.Abs(y))
         {
-            if(x > 0)
+            if (x > 0)
             {
                 swipeType = SwipeType.LEFT;
             }
@@ -117,9 +117,7 @@ public class TouchInput : MonoBehaviour
     private void DetectDoubleTap()
     {
         if (Time.time - _lastTapTime <= _doubleTapDelay)
-        {
-            // FindObjectOfType<Player>().StartDash();
-
+        {   
             Player player = FindObjectOfType<Player>();
 
             if (player != null)
@@ -131,5 +129,3 @@ public class TouchInput : MonoBehaviour
         _lastTapTime = Time.time;
     }
 }
-
-

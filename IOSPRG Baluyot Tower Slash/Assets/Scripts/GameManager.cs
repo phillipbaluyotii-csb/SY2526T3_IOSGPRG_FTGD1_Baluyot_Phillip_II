@@ -4,15 +4,14 @@ using TMPro;
 
 public class GameManager : Singleton<GameManager>
 {
-    [SerializeField] private GameObject _gameOverPanel;
-    
-    private bool _isGameOver;
-
     public bool IsGameOver => _isGameOver;
+
+    [SerializeField] private GameObject _gameOverPanel;
 
     [Header("Score")]   // scoring
     [SerializeField] private TMP_Text _scoreText;
 
+    private bool _isGameOver;
     private int _score;
 
     private void Start()

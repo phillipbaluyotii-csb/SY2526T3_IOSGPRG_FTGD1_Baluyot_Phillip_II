@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    public SwipeType SwipeType => _swipeType;
+
+    public bool IsReverse => _isReverse;
+
+    public bool CanBeKilled => _canBeKilled;
+
     [Header("Enemy Settings")]
-    //[SerializeField] private int _health = 1;
     [SerializeField] private float _speed = 3f;
 
     [Header("Arrow Settings")]
@@ -22,26 +27,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Sprite _leftArrow;
     [SerializeField] private Sprite _rightArrow;
 
-    [SerializeField] private GameObject _blackBox;  // black box
+    [SerializeField] private GameObject _blackBox;
 
     private bool _canBeKilled;
-
-    public SwipeType SwipeType => _swipeType;
-
-    public bool IsReverse => _isReverse;
-
-    public bool CanBeKilled => _canBeKilled;
-
-    /*private void Start()
-    {
-        InitializeEnemy();
-    }*/
-
-    private void Update()
-    {
-        MoveDown();
-        RotateArrow();
-    }
 
     private void Awake()
     {
@@ -52,17 +40,25 @@ public class Enemy : MonoBehaviour
             _arrowRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
-    private void MoveDown()
+    private void Update()
     {
-        transform.Translate(Vector3.down * _speed * Time.deltaTime);
+        MoveDown();
+        RotateArrow();
+    }
+
+    private void OnBecameInvisible()
+    {
+        if (Spawner.Instance != null)
+        {
+            Spawner.Instance.RemoveEnemyFromList(this);
+        }
+
+        Destroy(gameObject);
     }
 
     public void InitializeEnemy()
     {
         _swipeType = (SwipeType)Random.Range(0, 4);
-
-        //_isReverse = Random.Range(0, 2) == 0;
-        //_isRotating = Random.Range(0, 4) == 0;
 
         _isRotating = Random.Range(0, 4) == 0;
 
@@ -114,6 +110,11 @@ public class Enemy : MonoBehaviour
         {
             _blackBox.SetActive(false);
         }
+    }
+
+    private void MoveDown()
+    {
+        transform.Translate(Vector3.down * _speed * Time.deltaTime);
     }
 
     private void SetArrowSprite()
@@ -175,15 +176,5 @@ public class Enemy : MonoBehaviour
         }
 
         SetArrowSprite();
-    }
-
-    private void OnBecameInvisible()
-    {
-        if (Spawner.Instance != null)
-        {
-            Spawner.Instance.RemoveEnemyFromList(this);
-        }
-
-        Destroy(gameObject);
     }
 }

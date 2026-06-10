@@ -5,11 +5,21 @@ using TMPro;
 
 public class Player : MonoBehaviour
 {
+    public float GaugeReward
+    {
+        get
+        {
+            if (_characterType == CharacterType.Speed)
+                return 10f;
+
+            return 5f;
+        }
+    }
+
     [Header("Dash Mechanic")]
-    //[SerializeField] private float _dashDuration = 1f;
     [SerializeField] private bool _isDashing;
-    
-    [SerializeField] private GameObject _dashHitbox;    // Dash Hitbox
+
+    [SerializeField] private GameObject _dashHitbox;
 
     [Header("Player Lives")]
     [SerializeField] private int _maxLives = 3;
@@ -17,13 +27,8 @@ public class Player : MonoBehaviour
 
     [SerializeField] private bool _isInvincible;
     [SerializeField] private float _invincibleDuration = 1f;
-    
-    private Enemy _currentEnemy;
 
-    [SerializeField] private TMP_Text _livesText;   // lives UI
-
-    private CharacterType _characterType;   // character types
-    public static Player Instance;
+    [SerializeField] private TMP_Text _livesText;
 
     [SerializeField] private Animator _animator;
 
@@ -31,23 +36,97 @@ public class Player : MonoBehaviour
     [SerializeField] private RuntimeAnimatorController _tankController;
     [SerializeField] private RuntimeAnimatorController _speedController;
 
-    private void Start()
-    {
-        ApplyCharacter();
-        
-        _currentLives = _maxLives;
+    public static Player Instance;
 
-        UpdateLivesUI();
-    }
+    private Enemy _currentEnemy;
+    private CharacterType _characterType;
 
     private void Awake()
     {
         Instance = this;
     }
 
+    private void Start()
+    {
+        ApplyCharacter();
+
+        _currentLives = _maxLives;
+
+        UpdateLivesUI();
+    }
+
     private void Update()
     {
         CheckEnemy();
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        Enemy enemy = collision.GetComponent<Enemy>();
+
+        if (enemy != null)
+        {
+            enemy.DisableKill();
+
+            _currentEnemy = null;
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        Enemy enemy = collision.GetComponent<Enemy>();
+
+        if (enemy != null)
+        {
+            if (_currentEnemy != enemy)
+            {
+                TouchInput.Instance.swipeType = SwipeType.NONE;
+            }
+
+            enemy.EnableKill();
+            _currentEnemy = enemy;
+        }
+    }
+
+    public void TakeDamage()
+    {
+        if (_isInvincible)
+            return;
+
+        StartCoroutine(CO_Invincibility());
+
+        _currentLives--;
+
+        UpdateLivesUI();
+
+        Debug.Log("Lives left: " + _currentLives);
+
+        if (_currentLives <= 0)
+        {
+            GameManager.Instance.GameOver();
+        }
+    }
+
+    public void AddLife()
+    {
+        _currentLives++;
+
+        _currentLives = Mathf.Clamp(_currentLives, 0, _maxLives);
+
+        UpdateLivesUI();
+
+        Debug.Log("Extra Life Obtained!");
+    }
+
+    public void StartDash()
+    {
+        if (_isDashing)
+            return;
+
+        if (!DashGauge.Instance.CanDash())
+            return;
+
+        StartCoroutine(CO_DashRoutine());
     }
 
     private void ApplyCharacter()
@@ -147,87 +226,6 @@ public class Player : MonoBehaviour
         }
 
         return SwipeType.NONE;
-    }
-
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        Enemy enemy = collision.GetComponent<Enemy>();
-
-        if (enemy != null)
-        {
-            enemy.DisableKill();
-
-            _currentEnemy = null;
-        }
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        Enemy enemy = collision.GetComponent<Enemy>();
-
-        if (enemy != null)
-        {
-            if (_currentEnemy != enemy)
-            {
-                TouchInput.Instance.swipeType = SwipeType.NONE;
-            }
-
-            enemy.EnableKill();
-            _currentEnemy = enemy;
-        }
-    }
-
-    public float GaugeReward
-    {
-        get
-        {
-            if (_characterType == CharacterType.Speed)
-                return 10f;
-
-            return 5f;
-        }
-    }
-
-    public void TakeDamage()
-    {
-        if (_isInvincible)
-            return;
-
-        StartCoroutine(CO_Invincibility());
-
-        _currentLives--;
-
-        UpdateLivesUI();
-
-        Debug.Log("Lives left: " + _currentLives);
-
-        if ( _currentLives <= 0 )
-        {
-            GameManager.Instance.GameOver();
-        }
-    }
-
-    public void AddLife()
-
-    {
-        _currentLives++;
-
-        _currentLives = Mathf.Clamp(_currentLives, 0, _maxLives);
-
-        UpdateLivesUI();
-
-        Debug.Log("Extra Life Obtained!");
-    }
-    public void StartDash()
-    {
-        if (_isDashing)
-            return;
-
-        if (!DashGauge.Instance.CanDash())
-            return;
-
-        StartCoroutine(CO_DashRoutine());
     }
 
     private void TrySpawnExtraLife()
